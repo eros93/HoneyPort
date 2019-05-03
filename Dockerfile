@@ -38,6 +38,8 @@ COPY op_generate.py op_monitor.py ./
 
 #docker network create --subnet=172.18.0.0/16 mynet123
 #docker run -d --net mynet123 --ip 172.18.0.22 --cap-add=NET_ADMIN --name=honeyport -i -t honeyport
+#docker exec -i -t honeyport /bin/bash
+
 
 #sudo ipset create exported_ports bitmap:port range 0-65535
 #iptables -A OUTPUT -p tcp -m tcp --tcp-flags RST RST -j DROP
