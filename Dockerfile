@@ -20,14 +20,14 @@ RUN python3.6 -m pip install pip --upgrade
 
 ########################################################### Application needed: ################################################
 # ------- Install additionnal libraries with "apt-get -y"
-RUN apt-get install -y libsm6 libxext6 libglib2.0-0 libxrender-dev iptables git
+RUN apt-get install -y libsm6 libxext6 libglib2.0-0 libxrender-dev iptables git net-tools
 # ------- Or annd needed libraries into "requirements.txt" file and use it:
 #RUN python3.6 -m pip install -r requirements.txt
 
 ########################################################### Import files: ################################################
-#WORKDIR /usr/home/ -> TODO
-RUN mkdir -p /usr/home/honeyport 
-COPY op_generate.py op_monitor.py /usr/home/honeypot/
+WORKDIR /usr/home/honeypot
+#RUN mkdir -p /usr/home/honeyport 
+COPY op_generate.py op_monitor.py ./
 
 ########################################################### inside Docker : ################################################
 
