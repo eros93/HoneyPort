@@ -15,7 +15,7 @@ RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:jonathonf/python-3.6
 RUN apt-get update
 
-RUN apt-get install -y build-essential python3.6 python3.6-dev python3-pip python3.6-venv python-pip python2.7 python2.7-dev 
+RUN apt-get install -y build-essential python3.6 python3.6-dev python3-pip python3.6-venv python-pip python2.7 python2.7-dev python-virtualenv libssl-dev libffi-dev build-essential libpython3-dev python3-minimal authbind
 RUN python3.6 -m pip install pip --upgrade
 RUN apt-get autoremove
 RUN apt-get clean
@@ -33,11 +33,15 @@ RUN apt-get install -y libsm6 libxext6 libglib2.0-0 libxrender-dev iptables git 
 WORKDIR /usr/home/honeyport
 #RUN mkdir -p /usr/home/honeyport 
 COPY op_generate.py op_monitor.py ./
+RUN git clone http://github.com/cowrie/cowrie
 
 ########################################################### inside Docker : ################################################
 
 #docker network create --subnet=172.18.0.0/16 mynet123
 #docker run -d --net mynet123 --ip 172.18.0.22 --cap-add=NET_ADMIN --name=honeyport -i -t honeyport
+
+#docker network create -d macvlan --subnet 192.168.1.0/24 --gateway 192.168.1.254 -o parent=eth0 mvnet
+#docker run -d --net mvnet --ip 192.168.1.123 --cap-add=NET_ADMIN --name=honeyport -i -t honeyport
 #docker exec -i -t honeyport /bin/bash
 
 
@@ -46,3 +50,14 @@ COPY op_generate.py op_monitor.py ./
 #iptables -A OUTPUT -p icmp -m icmp --icmp-type 3 -j DROP
 #iptables -t nat -A PREROUTING -p tcp -m set --match-set exported_ports dst -j REDIRECT --to-ports 8888
 #socat TCP-LISTEN:8888,reuseaddr,fork -
+
+##########################################################  COWRIE inside #########################################################
+
+#adduser --disabled-password cowrie
+#su - cowrie 
+#git clone http://github.com/cowrie/cowrie
+#cd cowrie
+#virtualenv --python=python3 cowrie-env
+#source cowrie-env/bin/activate
+#(cowrie-env) $ pip install --upgrade pip
+(#cowrie-env) $ pip install --upgrade -r requirements.txt
