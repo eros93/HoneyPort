@@ -3,6 +3,8 @@ import re
 from time import sleep
 import os
 from datetime import datetime
+import pytz
+
 set_name = 'exported_ports'
 
 def open_ports():
@@ -24,14 +26,14 @@ while 1:
    new_closed = list(set(tmp_ports) - set(openports))
    if len(new_open):
      for port in new_open:
-       time=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+       time=datetime.now(pytz.timezone('Europe/Rome')).strftime('%Y-%m-%d %H:%M:%S')
        output1 = '[-] Removing port %s from ipset at %s' % (port, time)
        file_write(output1)
        print output1
        os.system('ipset del %s %s' % (set_name,port))
    if len(new_closed):
      for port in new_closed:
-       time=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+       time=datetime.now(pytz.timezone('Europe/Rome')).strftime('%Y-%m-%d %H:%M:%S')
        output2 = '[+] Adding port %s to ipset at %s' % (port, time)
        file_write(output2)
        print output2

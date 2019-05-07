@@ -19,7 +19,7 @@ os.system('ipset add %s 0-65535' % set_name)
 
 openports = open_ports()
 for port in openports:
-   print '[+] Adding port %s to ipset' % port
+   print '[+] Removing port %s to ipset' % port
    os.system('ipset del %s %s' % (set_name,port))
 
 
