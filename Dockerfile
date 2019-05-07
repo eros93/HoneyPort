@@ -61,3 +61,10 @@ RUN git clone http://github.com/cowrie/cowrie
 #source cowrie-env/bin/activate
 #(cowrie-env) $ pip install --upgrade pip
 (#cowrie-env) $ pip install --upgrade -r requirements.txt
+
+################################## make socat in background ##################
+# socat TCP-LISTEN:8888,reuseaddr,fork - &
+# jobs
+# ps faux
+# kill $PID
+
