@@ -60,7 +60,11 @@ RUN git clone http://github.com/cowrie/cowrie
 #virtualenv --python=python3 cowrie-env
 #source cowrie-env/bin/activate
 #(cowrie-env) $ pip install --upgrade pip
+<<<<<<< HEAD
+#(cowrie-env) $ pip install --upgrade -r requirements.txt
+=======
 #(#cowrie-env) $ pip install --upgrade -r requirements.txt
+>>>>>>> d7044820803d47694946bd1adeee5f7a55a0d1d8
 
 ################################## make socat in background ##################
 # socat TCP-LISTEN:8888,reuseaddr,fork - &
