@@ -23,8 +23,11 @@ script that monitor netstat output for newly opened/closed ports, then add it or
 Proxy that forward al the traffic coming from port 8888 to different honeypot according to the classification of the protocol
 
 Then run the honeypots:
+
 Cowrie on port 2222 -> SSH protocol
+
 sudo docker run -p 2222:2222 cowrie/cowrie
+
 nc -l -p 2223
-sudo docker run -p 2222:2222 cowrie/cowrie
+
 python3.6 -m http.server 2224
