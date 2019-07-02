@@ -1,0 +1,48 @@
+########### PROXY PYTHON ##########
+
+https://medium.com/@gdieu/build-a-tcp-proxy-in-python-part-1-3-7552cd5afdfe
+
+nc -l -p 2222
+nc -l -p 2223
+ncat -l 2223 -k -c 'xargs -n1 echo'
+nc localhost 8888
+sudo kill -9 7744
+lsof -i :8888
+
+siege -d10 -c50 http://localhost:8888
+
+python3.6 -m http.server 2224
+
+cd /home/eros/Scrivania/cartellaVM/tesi_VM/fake_SSK/ssh-honeypot
+sudo bin/ssh-honeypot -p 2223 -u nobody
+
+cd /home/eros/Scrivania/cartellaVM/tesi_VM/fake_SSK/SSH-Brute-Forcer/src
+python SSHBruteForce.py -i 127.0.0.1 -p 8888 -a 300 -l 8
+
+
+cd /home/eros/Scrivania/cartellaVM/tesi_VM/
+
+################################################SET UP ################################################
+
+cd /Scrivania/cartellaVM/tesi_VM/allport_honey/open-ports-honeypot
+sudo python op_generate.py
+sudo python op_monitor.py
+
+sudo su -
+docker rm $(docker ps -a -q)
+#sudo ipset create exported_ports bitmap:port range 0-65535
+iptables -A OUTPUT -p tcp -m tcp --tcp-flags RST RST -j DROP
+iptables -A OUTPUT -p icmp -m icmp --icmp-type 3 -j DROP
+iptables -t nat -A PREROUTING -p tcp -m set --match-set exported_ports dst -j REDIRECT --to-ports 8888
+iptables -t nat -I OUTPUT -p tcp -o lo -m set --match-set exported_ports dst -j REDIRECT --to-ports 8888
+
+cd /Scrivania/cartellaVM/tesi_VM/allport_honey/open-ports-honeypot
+sudo python op_generate.py
+sudo python op_monitor.py
+
+nc -l -p 2223
+sudo docker run -p 2222:2222 cowrie/cowrie
+python3.6 -m http.server 2224
+
+cd /Scrivania/cartellaVM/tesi_VM/proxy
+sudo python3.6 proxy21.py
