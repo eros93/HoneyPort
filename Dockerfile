@@ -50,6 +50,21 @@ RUN git clone http://github.com/cowrie/cowrie
 #iptables -A OUTPUT -p icmp -m icmp --icmp-type 3 -j DROP
 #iptables -t nat -A PREROUTING -p tcp -m set --match-set exported_ports dst -j REDIRECT --to-ports 8888
 #socat TCP-LISTEN:8888,reuseaddr,fork -
+iptables -t nat -I OUTPUT -p tcp -o lo -m set --match-set exported_ports dst -j REDIRECT --to-ports 8888
+
+#UDP
+#iptables -A OUTPUT -p udp -m udp --udp-flags RST RST -j DROP
+#iptables -A OUTPUT -p icmp -m icmp --icmp-type 3 -j DROP
+iptables -A FORWARD -i eth0 -p udp --dport 5000 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -t nat -A PREROUTING -p udp -m set --match-set exported_udp_ports dst -j REDIRECT --to-ports 8889
+iptables -A INPUT -p udp -m multiport --dports 20:40 -j ACCEPT
+
+#RESET 
+sudo iptables -t nat -F
+sudo iptables -t mangle -F
+sudo iptables -F
+sudo iptables -X
+
 
 ##########################################################  COWRIE inside #########################################################
 
@@ -58,13 +73,11 @@ RUN git clone http://github.com/cowrie/cowrie
 #git clone http://github.com/cowrie/cowrie
 #cd cowrie
 #virtualenv --python=python3 cowrie-env
-#source cowrie-env/bin/activate
+#exit
+
 #(cowrie-env) $ pip install --upgrade pip
-<<<<<<< HEAD
-#(cowrie-env) $ pip install --upgrade -r requirements.txt
-=======
 #(#cowrie-env) $ pip install --upgrade -r requirements.txt
->>>>>>> d7044820803d47694946bd1adeee5f7a55a0d1d8
+
 
 ################################## make socat in background ##################
 # socat TCP-LISTEN:8888,reuseaddr,fork - &
@@ -72,3 +85,21 @@ RUN git clone http://github.com/cowrie/cowrie
 # ps faux
 # kill $PID
 
+###############################à ssh #######################
+
+rsync --remove-source-files --exclude 'cowrie.json' --exclude 'cowrie.log' -av -e "ssh -p65535" efilippi@130.192.8.254:/home/cowrie/cowrie/var/log/cowrie/ /home/rootbigdata/honeypot
+
+/home/cowrie/cowrie/var/log/cowrie/ -> source
+
+/home/rootbigdata/honeypot -> dest
+
+
+-e ssh /percorso/cartella1 utenteremoto@hostremoto:/percorso/cartella2
+
+rsync -a "ssh -p65535" efilippi@130.192.8.254:/home/cowrie/cowrie/var/log/cowrie/ /root/backup_13_05_2019
+
+#ho dato permessi di root per avere la possibilità di cancellare i file dalla VM backuppati e per salvarli nella cartella dell host ... ho creanto ssh-keygen come root (nell host) e inviato sul server attraverso ssh-copy-id root@130.192.8.254 -p65535
+
+0 1 * * * rsync --remove-source-files --exclude 'cowrie.json' --exclude 'cowrie.log' -av -e "ssh -p65535" root@130.192.8.254:/home/cowrie/cowrie/var/log/cowrie/ /home/rootbigdata/honeypot >> /home/rootbigdata/honeypot/cronout.log 2>&1
+
+spark-submit --master yarn --deploy-mode client --conf "spark.ui.showConsoleProgress=true" read_from_hdfs.py /user/e.filippi/capture_prova.csv

@@ -10,3 +10,9 @@
 [-] Removing port 2432 from ipset at 2019-05-07 22:08:06
 [-] Removing port 22 from ipset at 2019-05-07 22:08:06
 [-] Removing port 53 from ipset at 2019-05-07 22:08:06
+[-] Removing port 631 from ipset at 2019-06-25 12:26:25
+[-] Removing port 8888 from ipset at 2019-06-25 12:26:25
+[-] Removing port 53 from ipset at 2019-06-25 12:26:25
+[-] Removing port 80 from ipset at 2019-06-25 12:26:25
+[-] Removing port 45243 from ipset at 2019-06-25 12:26:25
+[-] Removing port 1883 from ipset at 2019-06-25 12:26:25
