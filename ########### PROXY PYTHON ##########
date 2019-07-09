@@ -40,9 +40,13 @@ cd /Scrivania/cartellaVM/tesi_VM/allport_honey/open-ports-honeypot
 sudo python op_generate.py
 sudo python op_monitor.py
 
+
 nc -l -p 2223
 sudo docker run -p 2222:2222 cowrie/cowrie
-python3.6 -m http.server 2224
 
-cd /Scrivania/cartellaVM/tesi_VM/proxy
+httrack https://smartdata.polito.it/ -O .
+cd /home/eros/Scrivania/cartellaVM/tesi_VM/HTTPhoneypot/provasito
+python3.6 -m http.server 2224 
+
+cd /home/eros/Scrivania/cartellaVM/tesi_VM/proxy
 sudo python3.6 proxy21.py
