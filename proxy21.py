@@ -158,6 +158,7 @@ class Proxy:
 					general_socket.sendall(string) 
 		
 				else:	
+					print("general connection started")
 					general_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 					general_socket.connect((self.parts[0], self.parts[1]))
 					connect.new_connection(general_socket)
