@@ -127,6 +127,7 @@ class Proxy:
 				# SSH test and connection
 
 				if "SSH" in str(string):
+					print("SSH conection started")
 					SSH_socket = socket.socket()
 					SSH_socket.connect((self.parts[0], self.parts[3]))
 					connect.new_connection(SSH_socket)
@@ -140,6 +141,7 @@ class Proxy:
 				# HTTP test and connection
 
 				elif any(x in str(string) for x in HTTP_patterns):
+					print("HTTP connection started")
 					HTTP_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 					HTTP_socket.connect((self.parts[0], self.parts[4]))
 					connect.new_connection(HTTP_socket)
@@ -152,6 +154,7 @@ class Proxy:
 
 				# general connection
 				elif connect.socket_general[source] == True:
+					print("general connection started")
 					general_socket.sendall(string) 
 		
 				else:	
