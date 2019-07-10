@@ -242,8 +242,8 @@ if __name__ == '__main__':
 	logger.addHandler(c_handler)
 	logger.addHandler(logHandler)
 
-	# soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
-	# resource.setrlimit(resource.RLIMIT_NOFILE, (hard, hard))
+	soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+	resource.setrlimit(resource.RLIMIT_NOFILE, (hard, hard))
 	# print(hard)
 	printBanner()
 	p = Proxy()
