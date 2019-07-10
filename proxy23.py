@@ -122,14 +122,6 @@ class Proxy:
 		try:
 			while string:
 				string = source.recv(1024)
-				if "b''" in str(string):
-					# print("stoooooooooooooooooooooooooooooooooooooooop")
-					try:
-						# source.shutdown(socket.SHUT_RDWR) 
-						source.close()
-					except:
-						print("no source socket to close")
-						pass
 				# print(string)
 				connect.buffer_SSH[source].append(string)
 				connect.buffer_general[source].append(string)
@@ -138,6 +130,14 @@ class Proxy:
 				# SSH test and connection
 
 				if "SSH" in str(string):
+					if "b''" in str(string):
+						# print("stoooooooooooooooooooooooooooooooooooooooop")
+						try:
+							# source.shutdown(socket.SHUT_RDWR) 
+							source.close()
+						except:
+							print("no source socket to close")
+							pass
 					logger.info(log_message.format("SSH",raddr,fd))
 					# print(string)
 					SSH_socket = socket.socket()
@@ -201,7 +201,6 @@ class Proxy:
 					pass
 				if connect.socket_SSH[source] == True:
 					if "b''" in str(string):
-						# print("stoooooooooooooooooooooooooooooooooooooooop")
 						try:
 							source.close()
 						except:
@@ -243,8 +242,8 @@ if __name__ == '__main__':
 	logger.addHandler(c_handler)
 	logger.addHandler(logHandler)
 
-	soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
-	resource.setrlimit(resource.RLIMIT_NOFILE, (hard, hard))
+	# soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+	# resource.setrlimit(resource.RLIMIT_NOFILE, (hard, hard))
 	# print(hard)
 	printBanner()
 	p = Proxy()
