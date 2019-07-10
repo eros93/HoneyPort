@@ -148,6 +148,14 @@ class Proxy:
 					for message in connect.buffer_SSH[source]:
 						SSH_socket.sendall(message)
 				elif connect.socket_SSH[source] == True:
+					if "b''" in str(string):
+						# print("stoooooooooooooooooooooooooooooooooooooooop")
+						try:
+							# source.shutdown(socket.SHUT_RDWR) 
+							source.close()
+						except:
+							print("no source socket to close")
+							pass
 					SSH_socket.sendall(string) 
 
 				# HTTP test and connection
