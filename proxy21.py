@@ -116,6 +116,7 @@ class Proxy:
 					try:
 						# source.shutdown(socket.SHUT_RDWR) 
 						source.close()
+						# destination.close()
 						break
 					except:
 						print("no source socket to close")
@@ -194,6 +195,7 @@ class Proxy:
 					# print("stoooooooooooooooooooooooooooooooooooooooop")
 					try:
 						source.close()
+						destination.close()
 						break
 					except:
 						print("no source socket to close")
