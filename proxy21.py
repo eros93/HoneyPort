@@ -136,7 +136,7 @@ class Proxy:
 					for message in connect.buffer_SSH[source]:
 						SSH_socket.sendall(message)
 				elif connect.socket_SSH[source] == True:
-					print(string)
+					# print(string)
 					SSH_socket.sendall(string) 
 
 				# HTTP test and connection
