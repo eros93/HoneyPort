@@ -201,21 +201,20 @@ class Proxy:
 		try:
 			while string:
 				string = source.recv(1024)
-				if "b''" in str(string):
-					# print("stoooooooooooooooooooooooooooooooooooooooop")
-					try:
-						source.close()
-					except:
-						print("no source socket to close")
-						pass
-					try:
-						destination.close()
-					except:
-						print("no destination socket to close")
-						pass
-					finally:
-						break
-
+				if connect.socket_SSH[source] == True:
+					if "b''" in str(string):
+						try:
+							source.close()
+						except:
+							print("no source socket to close")
+							pass
+						try:
+							destination.close()
+						except:
+							print("no destination socket to close")
+							pass
+						finally:
+							break
 				connect.buffer_SSH[source].append(string)
 				try:
 					destination.sendall(string)
