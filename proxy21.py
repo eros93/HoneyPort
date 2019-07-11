@@ -201,12 +201,6 @@ class Proxy:
 		try:
 			while string:
 				string = source.recv(1024)
-				# print(string)
-				connect.buffer_SSH[source].append(string)
-				try:
-					destination.sendall(string)
-				except:
-					pass
 				if "b''" in str(string):
 					# print("stoooooooooooooooooooooooooooooooooooooooop")
 					try:
@@ -221,6 +215,13 @@ class Proxy:
 						pass
 					finally:
 						break
+
+				connect.buffer_SSH[source].append(string)
+				try:
+					destination.sendall(string)
+				except:
+					pass
+
 
 				
 		except:
