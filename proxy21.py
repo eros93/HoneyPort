@@ -118,7 +118,7 @@ class Proxy:
 						source.close()
 					except:
 						print("no source socket to close")
-						pass
+						break
 				# print(string)
 				connect.buffer_SSH[source].append(string)
 				connect.buffer_general[source].append(string)
