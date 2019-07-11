@@ -110,25 +110,38 @@ class Proxy:
 		string = ' '
 		try:
 			while string:
-				string = source.recv(1024)
-				if "b''" in str(string):
-					# print("stoooooooooooooooooooooooooooooooooooooooop")
-					try:
-						# source.shutdown(socket.SHUT_RDWR) 
-						source.close()
-						# destination.close()
-						break
-					except:
-						print("no source socket to close")
-						
-				# print(string)
+				string = source.recv(1024)						
 				connect.buffer_SSH[source].append(string)
 				connect.buffer_general[source].append(string)
 				connect.buffer_HTTP[source].append(string)
 
 				# SSH test and connection
+				if connect.socket_SSH[source] == True:
+					if "b''" in str(string):
+						try:
+							source.close()
+							destination.close()
+							break
+						except:
+							print("no source socket to close")
+					SSH_socket.sendall(string) 
 
-				if "SSH" in str(string):
+				elif connect.socket_HTTP[source] == True:
+					HTTP_socket.sendall(string) 
+
+				elif connect.socket_general[source] == True:
+					print("general connection started")
+					general_socket.sendall(string) 
+
+				elif "SSH" in str(string):
+					if "b''" in str(string):
+						try:
+							source.close()
+							destination.close()
+							break
+						except:
+							print("no source socket to close")
+
 					print("SSH conection started")
 					SSH_socket = socket.socket()
 					SSH_socket.connect((self.parts[0], self.parts[3]))
@@ -137,9 +150,6 @@ class Proxy:
 					thread.start_new_thread(self.forward_outside, (SSH_socket, source, connect))
 					for message in connect.buffer_SSH[source]:
 						SSH_socket.sendall(message)
-				elif connect.socket_SSH[source] == True:
-					# print(string)
-					SSH_socket.sendall(string) 
 
 				# HTTP test and connection
 
@@ -152,14 +162,9 @@ class Proxy:
 					thread.start_new_thread(self.forward_outside, (HTTP_socket, source, connect))
 					for message in connect.buffer_HTTP[source]:
 						HTTP_socket.sendall(message)
-				elif connect.socket_HTTP[source] == True:
-					HTTP_socket.sendall(string) 
+
 
 				# general connection
-				elif connect.socket_general[source] == True:
-					print("general connection started")
-					general_socket.sendall(string) 
-		
 				else:	
 					print("general connection started")
 					general_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
