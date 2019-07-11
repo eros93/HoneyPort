@@ -111,28 +111,28 @@ class Proxy:
 		try:
 			while string:
 				string = source.recv(1024)	
-				# if "b''" in str(string):
-				# 	try:
-				# 		source.close()
-				# 	except:
-				# 		print("no source socket to close")
-				# 		pass
-				# 	finally:
-				# 		break					
+				if "b''" in str(string):
+					try:
+						source.close()
+					except:
+						print("no source socket to close")
+						pass
+					finally:
+						break					
 				connect.buffer_SSH[source].append(string)
 				connect.buffer_general[source].append(string)
 				connect.buffer_HTTP[source].append(string)
 
 				# SSH test and connection
 				if connect.socket_SSH[source] == True:
-					if "b''" in str(string):
-						try:
-							source.close()
-						except:
-							print("no source socket to close")
-							pass
-						finally:
-							break
+					# if "b''" in str(string):
+					# 	try:
+					# 		source.close()
+					# 	except:
+					# 		print("no source socket to close")
+					# 		pass
+					# 	finally:
+					# 		break
 					SSH_socket.sendall(string) 
 
 				elif connect.socket_HTTP[source] == True:
@@ -143,14 +143,14 @@ class Proxy:
 					general_socket.sendall(string) 
 
 				elif "SSH" in str(string):
-					if "b''" in str(string):
-						try:
-							source.close()
-						except:
-							print("no source socket to close")
-							pass
-						finally:
-							break
+					# if "b''" in str(string):
+					# 	try:
+					# 		source.close()
+					# 	except:
+					# 		print("no source socket to close")
+					# 		pass
+					# 	finally:
+					# 		break
 
 					print("SSH conection started")
 					SSH_socket = socket.socket()
