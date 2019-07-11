@@ -116,9 +116,10 @@ class Proxy:
 					try:
 						# source.shutdown(socket.SHUT_RDWR) 
 						source.close()
+						break
 					except:
 						print("no source socket to close")
-						break
+						
 				# print(string)
 				connect.buffer_SSH[source].append(string)
 				connect.buffer_general[source].append(string)
@@ -193,6 +194,7 @@ class Proxy:
 					# print("stoooooooooooooooooooooooooooooooooooooooop")
 					try:
 						source.close()
+						break
 					except:
 						print("no source socket to close")
 						pass
