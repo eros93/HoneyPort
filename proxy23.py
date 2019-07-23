@@ -128,16 +128,33 @@ class Proxy:
 				connect.buffer_HTTP[source].append(string)
 
 				# SSH test and connection
-
-				if "SSH" in str(string):
+				if connect.socket_SSH[source] == True:
 					if "b''" in str(string):
-						# print("stoooooooooooooooooooooooooooooooooooooooop")
 						try:
-							# source.shutdown(socket.SHUT_RDWR) 
 							source.close()
 						except:
 							print("no source socket to close")
 							pass
+						finally:
+							break
+					SSH_socket.sendall(string) 
+
+				elif connect.socket_HTTP[source] == True:
+					HTTP_socket.sendall(string)	
+				
+				elif connect.socket_general[source] == True:
+					general_socket.sendall(string)			
+
+				elif "SSH" in str(string):
+					if "b''" in str(string):
+						try:
+							source.close()
+						except:
+							print("no source socket to close")
+							pass
+						finally:
+							break
+
 					logger.info(log_message.format("SSH",raddr,fd))
 					# print(string)
 					SSH_socket = socket.socket()
@@ -147,16 +164,7 @@ class Proxy:
 					thread.start_new_thread(self.forward_outside, (SSH_socket, source, connect))
 					for message in connect.buffer_SSH[source]:
 						SSH_socket.sendall(message)
-				elif connect.socket_SSH[source] == True:
-					if "b''" in str(string):
-						# print("stoooooooooooooooooooooooooooooooooooooooop")
-						try:
-							# source.shutdown(socket.SHUT_RDWR) 
-							source.close()
-						except:
-							print("no source socket to close")
-							pass
-					SSH_socket.sendall(string) 
+
 
 				# HTTP test and connection
 
@@ -169,13 +177,10 @@ class Proxy:
 					thread.start_new_thread(self.forward_outside, (HTTP_socket, source, connect))
 					for message in connect.buffer_HTTP[source]:
 						HTTP_socket.sendall(message)
-				elif connect.socket_HTTP[source] == True:
-					HTTP_socket.sendall(string) 
+ 
 
 				# general connection
-				elif connect.socket_general[source] == True:
-					general_socket.sendall(string) 
-		
+ 	
 				else:	
 					logger.info(log_message.format("general",raddr,fd))
 					general_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -201,12 +206,6 @@ class Proxy:
 		try:
 			while string:
 				string = source.recv(1024)
-				# print(string)
-				connect.buffer_SSH[source].append(string)
-				try:
-					destination.sendall(string)
-				except:
-					pass
 				if connect.socket_SSH[source] == True:
 					if "b''" in str(string):
 						try:
@@ -219,6 +218,14 @@ class Proxy:
 						except:
 							print("no destination socket to close")
 							pass
+						finally:
+							break
+				connect.buffer_SSH[source].append(string)
+				try:
+					destination.sendall(string)
+				except:
+					pass
+
 
 				
 		except Exception as e:
