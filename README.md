@@ -24,10 +24,14 @@ Proxy that forward al the traffic coming from port 8888 to different honeypot ac
 
 Then run the honeypots:
 
-Cowrie on port 2222 -> SSH protocol
+### set-up Responder ###
+
+socat TCP-LISTEN:2223,reuseaddr,fork -
 
 sudo docker run -p 2222:2222 cowrie/cowrie
 
-nc -l -p 2223
+httrack https://smartdata.polito.it/ -O .
 
-python3.6 -m http.server 2224
+python3.6 -m http.server 2224 
+
+sudo python3.6 proxy21.py
