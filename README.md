@@ -30,7 +30,7 @@ socat TCP-LISTEN:2223,reuseaddr,fork -
 
 sudo docker run -p 2222:2222 cowrie/cowrie
 
-httrack https://smartdata.polito.it/ -O .
+#httrack https://smartdata.polito.it/ -O .
 
 python3.6 -m http.server 2224 
 
